@@ -5,6 +5,8 @@
 
 ## ボードマネージャー
 - 最新のボード設定ファイルには **未対応** です。  
+https://docs.espressif.com/projects/arduino-esp32/en/latest/migration_guides/2.x_to_3.0.html  
+https://docs.espressif.com/projects/arduino-esp32/en/latest/api/timer.html  
 - ボードマネージャーの設定画面例：  
   ![ボードマネージャー](https://github.com/user-attachments/assets/13f791f7-17c5-4ff9-a990-ed120c7ed73e)  
 
