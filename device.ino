@@ -23,7 +23,7 @@ hw_timer_t *g_timer0 = NULL;
 portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
 void IRAM_ATTR onTimer() {  //0.2ms周期
   //noInterrupts(); // 排他制御開始
-  portENTER_CRITICAL(&timerMux);
+  portENTER_CRITICAL_ISR(&timerMux);
   left_cnt++;
   if(left_cnt==left_set-1){
     digitalWrite(STEP_A,1);
@@ -252,7 +252,7 @@ void IRAM_ATTR onTimer() {  //0.2ms周期
 
   }
 
-  portEXIT_CRITICAL(&timerMux);
+  portEXIT_CRITICAL_ISR(&timerMux);
   //interrupts(); // 排他制御終了
 }
 
@@ -331,12 +331,12 @@ void initAll(void)
   init_maze();
 
   // タイマ作成
-  g_timer0 = timerBegin(0, 80, true); // 80MHz/80= 1MHzカウント
+  g_timer0 = timerBegin(1000000); // 1MHzカウント
   // タイマ割り込みサービス・ルーチン onTimer を登録
-  timerAttachInterrupt(g_timer0, &onTimer, true);
+  timerAttachInterrupt(g_timer0, &onTimer);
   // 割り込みタイミング(ms)の設定
-  timerAlarmWrite(g_timer0, 200, true); //1MHz*200 = 0.2ms毎の呼びだし
+  timerAlarm(g_timer0, 200, true,0); //1MHz*200 = 0.2ms毎の呼びだし
   // タイマ有効化
-  timerAlarmEnable(g_timer0);
+  timerStart(g_timer0);
 
 }

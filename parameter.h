@@ -1,7 +1,7 @@
 //ゴール座標
-#define GOAL_X	7				//○ゴール座標(x)
-#define GOAL_Y	7				//○ゴール座標(y)
-//#define ONEONE				//1x1ゴール設定
+#define GOAL_X	3				//○ゴール座標(x)
+#define GOAL_Y	3				//○ゴール座標(y)
+#define ONEONE				//1x1ゴール設定
 
 //速度・距離
 #define ST_ACCL 1.0 //直線加速度 1=1m/ss
