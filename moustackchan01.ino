@@ -36,21 +36,27 @@ volatile uint32_t left_cnt = 0;
 volatile uint32_t right_cnt = 0;
 
 volatile uint32_t total_step = 0;
-volatile uint32_t diff_step = 0;
-volatile uint32_t  ref_deff_step;
 
-volatile double now_speed;
+volatile int32_t diff_step = 0;
+int32_t ref_deff_step;
+int32_t stepsUsedForAcceleration;
+
+volatile double now_speed=0;
 volatile double tar_speed=0;
-volatile double st_accl=1;
+volatile double st_accl=0;
+
+volatile double now_dif_speed=0;
+volatile double target_dif_speed=0;
+volatile double dif_accl=0;
 
 volatile char runmode=0;
 volatile double left_speed=0;
 volatile double right_speed=0;
 
-  double tmp_end_speed;
-  bool break_flug=0;
-  short tar_step;
-  short stepsUsedForAcceleration;
+double tmp_end_speed;
+bool break_flug=0;
+short tar_step;
+
 
 
 
@@ -181,7 +187,7 @@ void loop() {
       max_speed=600;//600mm/s
 
       ref_step=total_step;//距離0点
-      straight_for_search(0,SEARCH_SPEED); //壁尻当てから迷路中心までの距離
+      straight_for_search(0,SEARCH_SPEED); //ダミーの直進処理。何故か最初の直進が無視されるため
       straight_for_search(OSHIRI,SEARCH_SPEED); //壁尻当てから迷路中心までの距離
       ref_step=total_step;//距離0点
       straight_for_search(SECOND_HALF_SECTION + D06MM, 200);
@@ -214,7 +220,7 @@ void loop() {
       max_speed=600;
 
   		ref_step=total_step;//距離0点
-			straight_for_search(0,SEARCH_SPEED); //壁尻当てから迷路中心までの距離
+			straight_for_search(0,SEARCH_SPEED); //ダミーの直進処理。何故か最初の直進が無視されるため
       straight_for_search(OSHIRI,SEARCH_SPEED); //壁尻当てから迷路中心までの距離
 			ref_step=total_step;//距離0点
 
@@ -289,7 +295,7 @@ void loop() {
       while(1){;}
       break;
 
-    case 5:
+    case 5://オードスタート処置、重ね探索を繰り返す
       C5:
       delay(3000);
 

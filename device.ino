@@ -156,7 +156,7 @@ void IRAM_ATTR onTimer() {  //0.2ms周期
 
 
 
-    //加速度計算
+    //並進加速度計算
     if(st_accl>0 && now_speed<tar_speed){
       now_speed=now_speed+st_accl;
       if(now_speed>=tar_speed){now_speed=tar_speed;st_accl=0;}
@@ -165,7 +165,15 @@ void IRAM_ATTR onTimer() {  //0.2ms周期
       now_speed=now_speed+st_accl;
       if(now_speed<=tar_speed){now_speed=tar_speed;st_accl=0;}
     }
-
+    //左右タイヤの速度差の加速度を計算
+    if(dif_accl>0 && now_dif_speed<target_dif_speed){
+      now_dif_speed=now_dif_speed+dif_accl;
+      if(now_dif_speed>=target_dif_speed){now_dif_speed=target_dif_speed;dif_accl=0;}
+    }
+    if(dif_accl<0 && now_dif_speed>target_dif_speed){
+      now_dif_speed=now_dif_speed+dif_accl;
+      if(now_dif_speed<=target_dif_speed){now_dif_speed=target_dif_speed;dif_accl=0;}
+    }
 
     //壁トレース
     wall_trace_speed=0;
@@ -190,15 +198,12 @@ void IRAM_ATTR onTimer() {  //0.2ms周期
         //モータへの出力設定を直接指示している
         break;
 
-      case 3://左ターン
-        right_speed=now_speed;
-        left_speed =400-right_speed;
+      case 3://ターン
+        left_speed  = SLAM_SPEED + now_dif_speed;
+        right_speed = SLAM_SPEED - now_dif_speed;
         break;
 
-      case 4://右ターン
-        left_speed=now_speed;
-        right_speed =400-left_speed;
-        break;
+
 
       default://静止
         //モータへの出力設定
@@ -270,6 +275,7 @@ void initAll(void)
 
   M5.Power.begin(); //バッテリ電圧監視に必要
 
+  //delay(100);
   //IO設定
   pinMode(STEP_B,OUTPUT);//STEP_B
   pinMode(DIR_R,OUTPUT);//DIR_R
@@ -292,7 +298,7 @@ void initAll(void)
   left_set =0xfff0;
   right_set=0xfff0;
 
-
+  //delay(100);
   //portENTER_CRITICAL(&timerMux);
   // スプライトの作成
   lcd.begin();
@@ -307,6 +313,8 @@ void initAll(void)
   //M5.Lcd.print("Hello World!!");       // 画面にHello World!!と1行表示
 
   
+  //delay(100);
+  
 
   Serial.println("Hello M5stack!!");         // シリアルモニターにHello World!!と1行表示
 
@@ -318,7 +326,8 @@ void initAll(void)
   }
   #if 0
   Serial.println(" bytes read from Flash . Values are:");
-  delay(100);
+
+  //delay(100);
   for (int i = 0; i < EEPROM_SIZE; i++)
   {
     Serial.print(byte(EEPROM.read(i))); Serial.print(" ");

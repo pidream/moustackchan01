@@ -233,53 +233,59 @@ void turn(char dir,char times)
   tar_step = 72;//90°分のステップ差  
 
   if(times==0){return;}
-  ref_deff_step = diff_step;
-  if(dir==left){
-    runmode=3;
+
+  ref_deff_step = diff_step;//現在までの累積のステップ数の差を取得
+  runmode=3;
+
+  if(dir==left){//左ターン
+    
     noInterrupts(); // 排他制御開始
-    tar_speed=300;
-    st_accl=1;
+    target_dif_speed=-100;
+    dif_accl=-1;
     interrupts(); // 排他制御終了
 
-    while( now_speed<tar_speed){continue;}
+    while( now_dif_speed<target_dif_speed){continue;}
 
     stepsUsedForAcceleration = (diff_step)-ref_deff_step;//加速に使ったステップ数を記録
-    while( (diff_step)< (ref_deff_step + (tar_step - stepsUsedForAcceleration))){continue;}
+    //stepsUsedForAcceleration=15;
+    while( (diff_step)< (ref_deff_step + (tar_step - stepsUsedForAcceleration) )){continue;}
 
     noInterrupts(); // 排他制御開始
-    tar_speed=205;
-    st_accl=-1;
+    target_dif_speed=-10;
+    dif_accl=1;
     interrupts(); // 排他制御終了
 
-    while( (diff_step)< (ref_deff_step + tar_step)){continue;}
+    while( diff_step < ref_deff_step + tar_step && now_dif_speed!=0){continue;}
 
-  }else{
-    runmode=4;
+  }else{//右ターン
     noInterrupts(); // 排他制御開始
-    tar_speed=300;
-    st_accl=1;
+    target_dif_speed=100;
+    dif_accl=1;
     interrupts(); // 排他制御終了
 
-    while( now_speed<tar_speed){continue;}
+    while( now_dif_speed<target_dif_speed){continue;}
 
     stepsUsedForAcceleration = (diff_step)-ref_deff_step;//加速に使ったステップ数を記録
+    //stepsUsedForAcceleration=-15;
     while( (diff_step)> (ref_deff_step - (tar_step + stepsUsedForAcceleration) )){continue;}
 
     noInterrupts(); // 排他制御開始
-    tar_speed=205;
-    st_accl=-1;
+    target_dif_speed=10;
+    dif_accl=-1;
     interrupts(); // 排他制御終了
 
-    while((diff_step)> (ref_deff_step - tar_step)){continue;}
+    while(diff_step > ref_deff_step - tar_step && now_dif_speed!=0){continue;}
 
   }
 
   runmode=1;
   noInterrupts(); // 排他制御開始
+  now_dif_speed = 0;
+  target_dif_speed=0;
+  dif_accl=0;
+
   st_accl=0;
-  tar_speed=200;
-  left_speed =200;
-  right_speed=200;
+  tar_speed=SLAM_SPEED;
   interrupts(); // 排他制御終了
 
   ref_step=total_step;

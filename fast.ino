@@ -136,18 +136,28 @@ void fast_run(char x, char y)
 	while(1){
 	switch(run_pat[runsect]){
 		case 70://右ターン
-        #if 0
-        straight_for_search(D06MM, 200);
-        if(line_l>REF_SEN_L	+15){tmp_ofset_flug=-1;}//左壁に近い→右にずれる
-        turn(right,1);
-        if(tmp_ofset_flug==1){ref_step=total_step + D15MM;}
-        delay(100);
-        end_f_sensor = REF_SEN_FT;
-        straight_for_search(D75MM, 200);
-        ref_step = total_step;//距離0点
-        tmp_ofset_flug=0;
+        #if ENABLE_SLAM
+        	straight_for_search(D06MM, SLAM_SPEED);
+        	if((line_fl<line_fr+10 && line_fl>line_fr-10) || (sen_fl.is_wall == false && sen_fr.is_wall == false) ){
+						if(line_l>REF_SEN_L	+15){tmp_ofset_flug=-1;}//左壁に近い→右にずれる
+        		turn(right,1);
+        		if(tmp_ofset_flug==1){ref_step=total_step + D15MM;}
+        		delay(100);
+        		end_f_sensor = REF_SEN_FT;
+        		straight_for_search(D75MM, SLAM_SPEED);
+        		ref_step = total_step;//距離0点
+        		tmp_ofset_flug=0;
+					}else{
+          	straight_for_search(FIRST_HALF_SECTION,0);		//半区画進んで
+          	if(line_l>REF_SEN_L	+15){tmp_ofset_flug=-1;}//左壁に近い→右にずれる
+						rotate(right,1);					//右に曲がって
+						//end_f_sensor =END_SEN_FT;
+          	if(tmp_ofset_flug==1){ref_step=total_step + D15MM;}
+						straight_for_search(SECOND_HALF_SECTION,SLAM_SPEED);		//半区画進む
+						ref_step = total_step;//距離0点
+          	tmp_ofset_flug=0;
+					}
         #else
-
           straight_for_search(FIRST_HALF_SECTION,0);		//半区画進んで
           if(line_l>REF_SEN_L	+15){tmp_ofset_flug=-1;}//左壁に近い→右にずれる
 					rotate(right,1);					//右に曲がって
@@ -161,18 +171,29 @@ void fast_run(char x, char y)
 			break;
 			
 		case 80://左ターン
-        #if 0
-        straight_for_search(D06MM, 200);
-        if(line_r>REF_SEN_R	+15){tmp_ofset_flug=1;}//右壁に近い→左にずれる
-        turn(left,1);
-        if(tmp_ofset_flug==1){ref_step=total_step + D15MM;}
-        delay(100);
-        end_f_sensor = REF_SEN_FT;
-        straight_for_search(D75MM, 200);
-        ref_step = total_step;//距離0点
-        tmp_ofset_flug=0;
-        #else
+        #if ENABLE_SLAM
+        	straight_for_search(D06MM, SLAM_SPEED);
+					if((line_fl<line_fr+10 && line_fl>line_fr-10) || (sen_fl.is_wall == false && sen_fr.is_wall == false) ){//前壁との角度誤差がない場合（と前壁がない場合）にだけスラロームする
+        		if(line_r>REF_SEN_R	+15){tmp_ofset_flug=1;}//右壁に近い→左にずれる
+        		turn(left,1);
+        		if(tmp_ofset_flug==1){ref_step=total_step + D15MM;}
+        		delay(100);
+        		end_f_sensor = REF_SEN_FT;
+        		straight_for_search(D75MM, SLAM_SPEED);
+        		ref_step = total_step;//距離0点
+        		tmp_ofset_flug=0;						
+					}else{
+          	straight_for_search(FIRST_HALF_SECTION,0);		//半区画進んで
+          	if(line_r>REF_SEN_R	+15){tmp_ofset_flug=1;}//右壁に近い→左にずれる
+						rotate(left,1);					//右に曲がって
+						//end_f_sensor =END_SEN_FT;
+          	if(tmp_ofset_flug==1){ref_step=total_step + D15MM;}
+						straight_for_search(SECOND_HALF_SECTION,SLAM_SPEED);		//半区画進む
+						ref_step = total_step;//距離0点
+          	tmp_ofset_flug=0;	
+					}
 
+        #else
           straight_for_search(FIRST_HALF_SECTION,0);		//半区画進んで
           if(line_r>REF_SEN_R	+15){tmp_ofset_flug=1;}//右壁に近い→左にずれる
 					rotate(left,1);					//右に曲がって
@@ -199,9 +220,17 @@ void fast_run(char x, char y)
 			while(run_pat[runsect+1]==254){runsect++;}
 			
 				if(tempnow%2){//スタート直後の距離補正
-					turn(left,0);
-          straight(0,SEARCH_SPEED); //ダミー
-          straight(SECOND_HALF_SECTION+OSHIRI,SEARCH_SPEED);
+					//turn(left,0);
+          straight(0,SEARCH_SPEED); //ダミーの直進処理。何故か最初の直進が無視されるため
+          #if ENABLE_SLAM
+						if(tempnow==1){
+							straight(SECOND_HALF_SECTION+OSHIRI,SLAM_SPEED);
+						}else{
+							straight(SECOND_HALF_SECTION+OSHIRI,SEARCH_SPEED);
+						}
+					#else
+						straight(SECOND_HALF_SECTION+OSHIRI,SEARCH_SPEED);
+					#endif
           ref_step = total_step;//距離0
         }
 					
@@ -213,7 +242,11 @@ void fast_run(char x, char y)
 
 					default://次はターン
 						end_f_sensor = REF_SEN_FT;
-						straight((tempnow/2)*SECTION,SEARCH_SPEED);
+						#if ENABLE_SLAM
+							straight((tempnow/2)*SECTION,SLAM_SPEED);
+						#else
+							straight((tempnow/2)*SECTION,SEARCH_SPEED);
+						#endif
             tmp_ofset_flug=0;
 						break;
 				}//switch
