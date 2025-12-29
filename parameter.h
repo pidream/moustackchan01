@@ -1,26 +1,28 @@
 //ゴール座標
-#define GOAL_X	0				//○ゴール座標(x)
-#define GOAL_Y	3				//○ゴール座標(y)
-#define ONEONE				//1x1ゴール設定
+#define GOAL_X	7				//○ゴール座標(x)
+#define GOAL_Y	7				//○ゴール座標(y)
+//#define ONEONE				//1x1ゴール設定
 
 //スラローム走行有効か
 #define ENABLE_SLAM 1
-#define SLAM_SPEED 200 // m/s
+#define SLAM_SPEED 200 // mm/s
 
 
 //速度・距離
 #define ST_ACCL 1.0 //直線加速度 1=1m/ss
 #define ST_DE_ACCL 1.5 //直線加速度(減速) 1=1m/ss
-#define SEARCH_SPEED 400 // m/s
+#define SEARCH_SPEED 350 // mm/s
 #define SECTION 358 //1区画のステップ数 180mm=355
-#define FIRST_HALF_SECTION 124
-#define SECOND_HALF_SECTION 234 //96+21.41
+#define FIRST_HALF_SECTION 179
+#define SECOND_HALF_SECTION 179 //96+21.41
 //#define HALF_SECTION 177 //90mm
 #define OSHIRI 124 //62.59mm 尻あてから迷路中心まで
 #define D15MM 30
 #define D30MM 60
 #define D06MM 12
 #define D75MM 149
+#define D33MM 66
+#define D42MM 86
 
 //センサ 位置の基準
 //横壁
@@ -29,8 +31,8 @@
 #define KABE_TR_TH 15
 
 //前壁
-#define REF_SEN_FR	280			//マウスを尻あて時の前センサの値
-#define REF_SEN_FL	280			//マウスを尻あて時の前センサの値
+#define REF_SEN_FR	250			//マウスを柱真横の前センサの値
+#define REF_SEN_FL	250			//マウスを柱真横の前センサの値
 
 #define END_SEN_FR	327			//マウスを迷路中央に置いた時の前センサの値	45mm
 #define END_SEN_FL	327			//マウスを迷路中央に置いた時の前センサの値

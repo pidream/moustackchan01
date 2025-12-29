@@ -888,28 +888,51 @@ void search_adachi(char gx, char gy)
 				break;
 				
 			case right:
-          straight_for_search(FIRST_HALF_SECTION,0);		//半区画進んで
-          if(line_l>REF_SEN_L	+15){tmp_ofset_flug=-1;}//左壁に近い→右にずれる
-					rotate(right,1);					//右に曲がって
-					//end_f_sensor =END_SEN_FT;
-          if(tmp_ofset_flug==1){ref_step=total_step + D15MM;}
-					straight_for_search(SECOND_HALF_SECTION,SEARCH_SPEED);		//半区画進む
-					ref_step = total_step;//距離0点
+          straight_for_search(D33MM, SLAM_SPEED);//06+27=33
+        	if((line_fl<line_fr+10 && line_fl>line_fr-10) || (sen_fl.is_wall == false && sen_fr.is_wall == false) ){
+						if(line_l>REF_SEN_L	+15){tmp_ofset_flug=-1;}//左壁に近い→右にずれる
+        		turn(right,1);
+        		if(tmp_ofset_flug==1){ref_step=total_step + D15MM;}
+        		delay(100);
+        		end_f_sensor = REF_SEN_FT;
+        		straight_for_search(D42MM, SLAM_SPEED);//75-33=42
+        		ref_step = total_step;//距離0点
+        		tmp_ofset_flug=0;
+					}else{
+						straight_for_search(FIRST_HALF_SECTION,0);		//半区画進んで
+          	if(line_l>REF_SEN_L	+15){tmp_ofset_flug=-1;}//左壁に近い→右にずれる
+						rotate(right,1);					//右に曲がって
+						//end_f_sensor =END_SEN_FT;
+          	if(tmp_ofset_flug==1){ref_step=total_step + D15MM;}
+						straight_for_search(SECOND_HALF_SECTION,SEARCH_SPEED);		//半区画進む
+						ref_step = total_step;//距離0点
 					
-          tmp_ofset_flug=0;
-
+          	tmp_ofset_flug=0;
+					}
 				break;
 			
 			case left:
-          straight_for_search(FIRST_HALF_SECTION,0);		//半区画進んで
-          if(line_r>REF_SEN_R	+15){tmp_ofset_flug=1;}//右壁に近い→左にずれる
-					rotate(left,1);					//右に曲がって
-					//end_f_sensor =END_SEN_FT;
-          if(tmp_ofset_flug==1){ref_step=total_step + D15MM;}
-					straight_for_search(SECOND_HALF_SECTION,SEARCH_SPEED);		//半区画進む
-					ref_step = total_step;//距離0点
+			    straight_for_search(D33MM, SLAM_SPEED);
+					if((line_fl<line_fr+10 && line_fl>line_fr-10) || (sen_fl.is_wall == false && sen_fr.is_wall == false) ){//前壁との角度誤差がない場合（と前壁がない場合）にだけスラロームする
+        		if(line_r>REF_SEN_R	+15){tmp_ofset_flug=1;}//右壁に近い→左にずれる
+        		turn(left,1);
+        		if(tmp_ofset_flug==1){ref_step=total_step + D15MM;}
+        		delay(100);
+        		end_f_sensor = REF_SEN_FT;
+        		straight_for_search(D42MM, SLAM_SPEED);
+        		ref_step = total_step;//距離0点
+        		tmp_ofset_flug=0;						
+					}else{
+          	straight_for_search(FIRST_HALF_SECTION,0);		//半区画進んで
+          	if(line_r>REF_SEN_R	+15){tmp_ofset_flug=1;}//右壁に近い→左にずれる
+						rotate(left,1);					//右に曲がって
+						//end_f_sensor =END_SEN_FT;
+         	 if(tmp_ofset_flug==1){ref_step=total_step + D15MM;}
+						straight_for_search(SECOND_HALF_SECTION,SEARCH_SPEED);		//半区画進む
+						ref_step = total_step;//距離0点
 
-          tmp_ofset_flug=0;
+          	tmp_ofset_flug=0;
+					}
 				break;
 				
 			
