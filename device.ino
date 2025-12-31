@@ -1,16 +1,3 @@
-const unsigned char log_table[101]={
-  0,
-  0, 30, 48, 60, 70, 78, 85, 90, 95,100,
-104,108,111,115,118,120,123,126,128,130,
-132,134,136,138,140,141,143,145,146,148,
-149,151,152,153,154,156,157,158,159,160,
-161,162,163,164,165,166,167,168,169,170,
-171,172,172,173,174,175,176,176,177,178,
-179,179,180,181,181,182,183,183,184,185,
-185,186,186,187,188,188,189,189,190,190,
-191,191,192,192,193,193,194,194,195,195,
-196,196,197,197,198,198,199,199,200,200
-};
 
 volatile short wall_trace_speed=0;
 volatile short wall_trace_step=0;
@@ -87,66 +74,13 @@ void IRAM_ATTR onTimer() {  //0.2ms周期
   if(mode_case == 4){// ///////////////////////////////// ここから 1ms毎に実行
     cnt0++;
 
-	//max - 4096(2^12)
-	if(r_side<100){
-		line_r =log_table[r_side];
-	}else if(r_side<198){
-		line_r =log_table[r_side/2]+30;
-	}else if(r_side<394){
-		line_r =log_table[r_side/4]+60;	
-	}else if(r_side<899){
-		line_r =log_table[r_side/9]+95;	
-	}else if(r_side<1973){
-		line_r =log_table[r_side/20]+130;		
-	}else{
-		line_r =log_table[r_side/46]+166;	
-	}
-  
-
-  if(r_front<100){
-		line_fr =log_table[r_front];
-	}else if(r_front<198){
-		line_fr =log_table[r_front/2]+30;
-	}else if(r_front<394){
-		line_fr =log_table[r_front/4]+60;	
-	}else if(r_front<899){
-		line_fr =log_table[r_front/9]+95;	
-	}else if(r_front<1973){
-		line_fr =log_table[r_front/20]+130;		
-	}else{
-		line_fr =log_table[r_front/46]+166;	
-	}
-  //line_fr=line_fr+10;
-  
-  if(l_front<100){
-		line_fl =log_table[l_front];
-	}else if(l_front<198){
-		line_fl =log_table[l_front/2]+30;
-	}else if(l_front<394){
-		line_fl =log_table[l_front/4]+60;	
-	}else if(l_front<899){
-		line_fl =log_table[l_front/9]+95;	
-	}else if(l_front<1973){
-		line_fl =log_table[l_front/20]+130;		
-	}else{
-		line_fl =log_table[l_front/46]+166;	
-	}
+  //壁センサ線形化(log変換)
+	line_r =log_table[r_side];
+	line_fr =log_table[r_front];
+	line_fl =log_table[l_front];
+  line_l =log_table[l_side];
+  //壁センサの値調整
   line_fl=(double)line_fl*0.84+70;
-
-  if(l_side<100){
-		line_l =log_table[l_side];
-	}else if(l_side<198){
-		line_l =log_table[l_side/2]+30;
-	}else if(l_side<394){
-		line_l =log_table[r_side/4]+60;	
-	}else if(l_side<899){
-		line_l =log_table[l_side/9]+95;	
-	}else if(l_side<1973){
-		line_l =log_table[l_side/20]+130;		
-	}else{
-		line_l =log_table[l_side/46]+166;	
-	}
-
 
 	//壁有無判定|| (line_l>TH_SEN_L-30||line_r>cal_cen_l+30)|| (line_r>TH_SEN_R-30||line_l>cal_cen_l+30)
 	if(line_l > TH_SEN_L ){sen_l.is_wall  = true;}else{sen_l.is_wall  = false;}
@@ -273,6 +207,8 @@ void initAll(void)
   cfg.internal_mic = false;
   M5.begin(cfg);                 // M5デバイスの初期化
 
+
+
   M5.Power.begin(); //バッテリ電圧監視に必要
 
   //delay(100);
@@ -298,25 +234,16 @@ void initAll(void)
   left_set =0xfff0;
   right_set=0xfff0;
 
-  //delay(100);
-  //portENTER_CRITICAL(&timerMux);
-  // スプライトの作成
-  lcd.begin();
-  lcd.fillScreen(TFT_BLACK);
-  canvas.setColorDepth(8);
-  canvas.createSprite(226, 226);
-  //portEXIT_CRITICAL(&timerMux);
 
-  lcd.setRotation(0);
-  lcd.setTextSize(2);               // テキストサイズを変更
-  lcd.setTextFont(2);
+
+
   //M5.Lcd.print("Hello World!!");       // 画面にHello World!!と1行表示
 
   
   //delay(100);
   
 
-  Serial.println("Hello M5stack!!");         // シリアルモニターにHello World!!と1行表示
+  //Serial.println("Hello M5stack!!");         // シリアルモニターにHello World!!と1行表示
 
   
 
@@ -347,5 +274,15 @@ void initAll(void)
   timerAlarm(g_timer0, 200, true,0); //1MHz*200 = 0.2ms毎の呼びだし
   // タイマ有効化
   timerStart(g_timer0);
-
+  //delay(100);
+  //portENTER_CRITICAL(&timerMux);
+  // スプライトの作成
+  lcd.begin();
+  lcd.setRotation(0);
+  lcd.setTextSize(2);               // テキストサイズを変更
+  lcd.setTextFont(2);
+  //lcd.fillScreen(TFT_BLACK);
+  canvas.setColorDepth(8);
+  canvas.createSprite(226, 226);//51kバイト
+  //portEXIT_CRITICAL(&timerMux);
 }

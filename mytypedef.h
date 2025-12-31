@@ -65,3 +65,24 @@ typedef enum
 	left=3,			//左
 	unknown,		//方向不明
 }t_local_dir;	//自分から見た方向を示す列挙型
+
+typedef struct
+{
+	unsigned short step:6;		//step
+	unsigned short ter_speed:10;	//目標速度
+	
+	unsigned char now_speed_T:8; 	//目標速度との速度差
+	unsigned char now_speed_D:8;	//左右速度差
+	
+	unsigned char ter_gyro:8;	//目標角速度
+	unsigned char now_gyro:8;	//現在の角速度
+	
+	unsigned char sensor_l:8;	//
+	unsigned char sensor_fl:8;	//
+	
+	unsigned char sensor_fr:8;	//
+	unsigned char sensor_r:8;	//
+	
+	unsigned short batt:7;	//
+	unsigned short resve:9;	//
+}t_log;			//LOG構造体

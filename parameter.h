@@ -1,28 +1,32 @@
 //ゴール座標
-#define GOAL_X	7				//○ゴール座標(x)
-#define GOAL_Y	7				//○ゴール座標(y)
-//#define ONEONE				//1x1ゴール設定
+#define GOAL_X	2				//○ゴール座標(x)
+#define GOAL_Y	2				//○ゴール座標(y)
+#define ONEONE				//1x1ゴール設定
 
 //スラローム走行有効か
 #define ENABLE_SLAM 1
-#define SLAM_SPEED 200 // mm/s
 
 
-//速度・距離
+//速度
 #define ST_ACCL 1.0 //直線加速度 1=1m/ss
 #define ST_DE_ACCL 1.5 //直線加速度(減速) 1=1m/ss
 #define SEARCH_SPEED 350 // mm/s
+#define SLAM_SPEED 200 // mm/s
+
+//距離
 #define SECTION 358 //1区画のステップ数 180mm=355
 #define FIRST_HALF_SECTION 179
 #define SECOND_HALF_SECTION 179 //96+21.41
 //#define HALF_SECTION 177 //90mm
 #define OSHIRI 124 //62.59mm 尻あてから迷路中心まで
-#define D15MM 30
-#define D30MM 60
 #define D06MM 12
-#define D75MM 149
+#define D15MM 30
+#define D27MM 53
+
+#define D30MM 60
 #define D33MM 66
 #define D42MM 86
+#define D75MM 149
 
 //センサ 位置の基準
 //横壁
@@ -39,6 +43,8 @@
 
 #define REF_SEN_FT	(REF_SEN_FR+REF_SEN_FL)	//柱位置
 #define END_SEN_FT	(END_SEN_FR+END_SEN_FL)	//迷路中央
+
+#define START_TURN (285+285)  //ターン直前の前壁の値
 
 
 

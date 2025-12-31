@@ -7,7 +7,7 @@ void save_map(void){
   ep_addr = 0;
   for (ep_x = 0; ep_x < MAZESIZE_X; ep_x++){
     for (ep_y = 0; ep_y < MAZESIZE_Y; ep_y++){
-      // 
+      //1バイト単位の書き込み
       EEPROM.write(ep_addr, (wall[ep_x][ep_y].north<<6 | wall[ep_x][ep_y].east<<4 | wall[ep_x][ep_y].south<<2 | wall[ep_x][ep_y].west) );
       ep_addr++;
     }
@@ -20,7 +20,7 @@ void load_map(void){
   ep_addr = 0;
   for (ep_x = 0; ep_x < MAZESIZE_X; ep_x++){
     for (ep_y = 0; ep_y < MAZESIZE_Y; ep_y++){
-      ep_data = EEPROM.read(ep_addr);
+      ep_data = EEPROM.read(ep_addr);//1バイト単位の読み込み
       wall[ep_x][ep_y].north = ((ep_data >> 6)&0x03);
       wall[ep_x][ep_y].east  = ((ep_data >> 4)&0x03);
       wall[ep_x][ep_y].south = ((ep_data >> 2)&0x03);

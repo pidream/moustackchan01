@@ -12,7 +12,7 @@ void fast_calc(char x, char y)
 
 	harf_sect=1; //スタート直後のフラグ
 	make_map(x,y,MASK_SECOND,EXACT_SEACH);		//重みづけ歩数Map生成
-  if( step_map[0][0] == 0xffff){lcd.printf("mapbreak \n");delay(3000);return;}
+  if( step_map[0][0] == 0xffff){M5.Lcd.printf("mapbreak \n");delay(3000);return;}
 	//lcd.printf("x:%d,y:%d,w:%d \n",mypos.x,mypos.y,step_map[mypos.x][mypos.y]);
 
 	while(step_map[mypos.x][mypos.y]!=0){
@@ -137,6 +137,7 @@ void fast_run(char x, char y)
 	switch(run_pat[runsect]){
 		case 70://右ターン
         #if ENABLE_SLAM
+					end_f_sensor = START_TURN;
         	straight_for_search(D33MM, SLAM_SPEED);//06+27=33
         	if((line_fl<line_fr+10 && line_fl>line_fr-10) || (sen_fl.is_wall == false && sen_fr.is_wall == false) ){
 						if(line_l>REF_SEN_L	+15){tmp_ofset_flug=-1;}//左壁に近い→右にずれる
@@ -172,6 +173,7 @@ void fast_run(char x, char y)
 			
 		case 80://左ターン
         #if ENABLE_SLAM
+					end_f_sensor = START_TURN;
         	straight_for_search(D33MM, SLAM_SPEED);
 					if((line_fl<line_fr+10 && line_fl>line_fr-10) || (sen_fl.is_wall == false && sen_fr.is_wall == false) ){//前壁との角度誤差がない場合（と前壁がない場合）にだけスラロームする
         		if(line_r>REF_SEN_R	+15){tmp_ofset_flug=1;}//右壁に近い→左にずれる
