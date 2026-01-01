@@ -1,4 +1,7 @@
-# 開発環境の準備
+# ハードウェアの概要
+　https://www.pidream.net/2024/04/240430.html
+ 
+# 開発環境
 
 ## Arduino IDE
 - 使用バージョン：**Arduino IDE 2.3.6**  
