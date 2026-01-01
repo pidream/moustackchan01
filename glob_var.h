@@ -161,6 +161,7 @@ volatile uint32_t left_cnt = 0;
 volatile uint32_t right_cnt = 0;
 
 volatile uint32_t total_step = 0;
+volatile uint32_t stepfor1mm = 0;
 
 volatile int32_t diff_step = 0;
 int32_t ref_deff_step;

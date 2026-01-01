@@ -19,6 +19,7 @@
 #define SECOND_HALF_SECTION 179 //96+21.41
 //#define HALF_SECTION 177 //90mm
 #define OSHIRI 124 //62.59mm 尻あてから迷路中心まで
+#define D01MM 2
 #define D06MM 12
 #define D15MM 30
 #define D27MM 53
@@ -32,7 +33,9 @@
 //横壁
 #define REF_SEN_R	320			//マウスを迷路中央に置いた時の横センサの値
 #define REF_SEN_L	320			//マウスを迷路中央に置いた時の横センサの値
-#define KABE_TR_TH 15
+#define REF_SEN_RP	300		//柱だけの時の横センサの値
+#define REF_SEN_LP	300		//柱だけの時の横センサの値
+#define KABE_TR_TH 15     //壁制御不感帯幅
 
 //前壁
 #define REF_SEN_FR	250			//マウスを柱真横の前センサの値
