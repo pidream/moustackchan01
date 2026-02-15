@@ -132,8 +132,8 @@ void IRAM_ATTR onTimer() {  //0.2ms周期
           if(line_fr>line_fl+5){wall_trace_speed= 10;}//右側が前にある→右回転  
 
         }else{
-          if(edge_cnt_R>180 ){wall_trace_speed= 5;if(edge_cnt_R>200){edge_cnt_R=0;}}//右壁からづっと離れている→右回転(串とか片側のみ壁時の制御)
-          if(edge_cnt_L>180 ){wall_trace_speed=-5;if(edge_cnt_L>200){edge_cnt_L=0;}}//左壁からづっと離れている→左回転(通常なら180mm毎に柱を検出するが無ければ)
+          if(edge_cnt_R>180 ){wall_trace_speed= 5;if(edge_cnt_R>190){edge_cnt_R=0;}}//右壁からづっと離れている→右回転(串とか片側のみ壁時の制御)
+          if(edge_cnt_L>180 ){wall_trace_speed=-5;if(edge_cnt_L>190){edge_cnt_L=0;}}//左壁からづっと離れている→左回転(通常なら180mm毎に柱を検出するが無ければ)
                                                                                     //180mm以上壁がなければ200mmまでの間向きを変える
           if(line_l>REF_SEN_L	+KABE_TR_TH){wall_trace_speed= 5;}//左壁に近い→右回転
           if(line_r>REF_SEN_R	+KABE_TR_TH){wall_trace_speed=-5;}//右壁に近い→左回転

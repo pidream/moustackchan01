@@ -32,9 +32,9 @@ void loop() {
     M5.update();
 
     state =  M5.BtnA.wasPressed();
-    if(state == true || M5.BtnPWR.wasClicked()){run_mode--;if(run_mode<0){run_mode=4;}lcd.fillScreen(BLACK);}
+    if(state == true || M5.BtnPWR.wasClicked()){run_mode--;if(run_mode<0){run_mode=5;}lcd.fillScreen(BLACK);}
     state =  M5.BtnC.wasPressed();
-    if(state == true ){run_mode++;if(run_mode>4){run_mode=0;}lcd.fillScreen(BLACK);}
+    if(state == true ){run_mode++;if(run_mode>5){run_mode=0;}lcd.fillScreen(BLACK);}
     state =  M5.BtnB.wasPressed();
     if(state == true ||  M5.BtnPWR.wasHold()){canvas.fillScreen(BLACK);break;}
 
@@ -91,6 +91,12 @@ void loop() {
         lcd.printf("goal y= %d\n",GOAL_Y);
         break;
 
+      case 5:
+        lcd.setCursor(0, 0);              // 文字の描画座標（カーソル位置）を設定
+        lcd.printf("%d slam run\n",run_mode);
+        lcd.printf("goal x= %d\n",GOAL_X);
+        lcd.printf("goal y= %d\n",GOAL_Y);
+        break;
 
       default:
         lcd.setCursor(50, 0);              // 文字の描画座標（カーソル位置）を設定
@@ -209,7 +215,7 @@ void loop() {
 
       view_map();
       
-      goto C5;
+      goto C99;
 
       while(1){;}
       break;
@@ -225,6 +231,7 @@ void loop() {
       while(line_fr<280){
         canvas.pushSprite(&lcd, random(0,14), 45+random(0,10) );
         delay(30); 
+        fotce_sr_en = false;
       }
       lcd.fillScreen(BLACK);
       canvas.pushSprite(&lcd, 7, 50 );
@@ -246,8 +253,44 @@ void loop() {
       while(1){;}
       break;
 
-    case 5://オードスタート処置、重ね探索を繰り返す
-      C5:
+    case 5://最短
+      load_map();
+      
+      fast_calc(GOAL_X, GOAL_Y);
+      
+      digitalWrite(MOTOR_EN, 1);  // nsleepをHIGHでモータ励磁
+
+
+      while(line_fr<280){
+        canvas.pushSprite(&lcd, random(0,14), 45+random(0,10) );
+        delay(30); 
+        fotce_sr_en = true;
+      }
+      lcd.fillScreen(BLACK);
+      canvas.pushSprite(&lcd, 7, 50 );
+      delay(1000);
+      cnt0=0;
+
+      max_speed=600;
+
+      fast_run(GOAL_X, GOAL_Y);
+
+      digitalWrite(MOTOR_EN, 0);  // nsleepをHIGHでモータ励磁
+    
+      lcd.setCursor(0, 0); 
+      lcd.fillScreen(BLACK);
+      lcd.printf("goal \n");
+      lcd.printf("V_BAT: %3d,  \n",M5.Power.getBatteryLevel());
+      if(flug_run_err==1){lcd.printf("flug_run_err \n");}
+
+      while(1){;}
+      break;
+
+
+
+
+    case 99://オードスタート処置、重ね探索を繰り返す
+      C99:
       delay(3000);
 
       digitalWrite(MOTOR_EN, 1);  // nsleepをHIGHでモータ励磁

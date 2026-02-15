@@ -183,4 +183,5 @@ double tmp_end_speed;
 bool break_flug=0;
 short tar_step;
 
+bool fotce_sr_en;
 t_log savedata[600];//12バイト×600=7.2kバイト
