@@ -578,10 +578,12 @@ char get_nextdir(unsigned char mask, t_direction *dir)
 	//探索、最短の切り替えのためのmaskを指定、dirは方角を示す
 	char priority,tmp_priority;		//最小の値を探すために使用する変数
 	unsigned short little;
-	static t_direction old_dir[2];
 
 	little =  step_map[mypos.x][mypos.y];			//仮で今いる場所の重さを入れておく
 
+	//歩数マップを作った時と違うmaskで呼ばれた場合、どの方位も採用されず*dirが未代入のまま返る可能性がある。
+	//その時に前進(front)を返すと進めない方向へ進んでしまうため、既定値は後退(rear)にしておく。
+	*dir = (t_direction)((mypos.dir + 2) % 4);
 
 	priority = 0;					//優先度の初期値は0
 
@@ -616,11 +618,7 @@ char get_nextdir(unsigned char mask, t_direction *dir)
 		}
 		else if( step_map[mypos.x + 1][mypos.y] == little)			//歩数が同じ場合、優先度から判断
 		{
-			if(priority == tmp_priority && old_dir[1]==east)//同一歩数の場合は2つ前と同じ向きに進む⇒斜め
-			{
-				*dir = east;
-			}
-			else if(priority < tmp_priority)			//優先度を評価
+			if(priority < tmp_priority)			//優先度を評価
 			{
 				*dir = east;					//方向を保存
 				priority = tmp_priority;			//優先度を保存
@@ -639,11 +637,7 @@ char get_nextdir(unsigned char mask, t_direction *dir)
 		}
 		else if( step_map[mypos.x][mypos.y - 1] == little)			//歩数が同じ場合、優先度で評価
 		{
-			if(priority == tmp_priority && old_dir[1]==south)
-			{
-				*dir = south;	
-			}
-			else if(priority < tmp_priority)			//優先度を評価
+			if(priority < tmp_priority)			//優先度を評価
 			{
 				*dir = south;					//方向を保存
 				priority = tmp_priority;			//優先度を保存
@@ -662,11 +656,7 @@ char get_nextdir(unsigned char mask, t_direction *dir)
 		}
 		else if( step_map[mypos.x - 1][mypos.y] == little)			//歩数が同じ場合、優先度で評価
 		{
-			if(priority == tmp_priority && old_dir[1]==west)
-			{
-				*dir = west;
-			}
-			else if(priority < tmp_priority)			//優先度を評価
+			if(priority < tmp_priority)			//優先度を評価
 			{			
 				*dir = west;					//方向を保存
 				priority = tmp_priority;			//優先度を保存
@@ -676,8 +666,6 @@ char get_nextdir(unsigned char mask, t_direction *dir)
 	
 
 	//_LED(0);
-	old_dir[1] = old_dir[0];
-	old_dir[0] = (*dir);
 	return ( (char)( ( 4 + *dir - mypos.dir) % 4 ) );			//どっちに向かうべきかを返す。
 										//演算の意味はmytyedef.h内のenum宣言から。
 	
