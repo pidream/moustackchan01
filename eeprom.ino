@@ -16,6 +16,23 @@ void save_map(void){
   EEPROM.commit();
 }
 
+//探索途中でのMAP保存
+//ゴールまでの経路が既知の壁だけで導出できる場合のみEEPROMに書き込む
+//EEPROM書き込み中はタイマ割り込みが停止するため、必ず停止中に呼ぶこと
+//引数gx,gyは現在の探索目標。判定後に探索用の歩数Mapへ戻すために使う
+bool save_map_on_the_way(char gx, char gy){
+  bool route_found = false;
+
+  make_map(GOAL_X, GOAL_Y, MASK_SECOND, EXACT_SEACH);//最短走行と同じ条件でゴールまでの歩数Mapを作る
+  if( step_map[0][0] != 0xffff ){//スタートまで歩数が繋がっていれば経路が導出できる
+    save_map();//壁情報が前回保存時と同じならcommit()は実行されない
+    route_found = true;
+  }
+  make_map(gx, gy, MASK_SEARCH, FAST_SEACH);//探索用の歩数Mapに戻す
+
+  return route_found;
+}
+
 void load_map(void){
   ep_addr = 0;
   for (ep_x = 0; ep_x < MAZESIZE_X; ep_x++){

@@ -943,7 +943,9 @@ void search_adachi(char gx, char gy)
 				straight_for_search(FIRST_HALF_SECTION,0);		//半区画進んで
 
 				janpstop:
-				
+
+				save_map_on_the_way(gx,gy);	//袋小路等で停止している間にMAPを保存(ゴールまでの経路が引ける時のみ)
+
 				if(tmp_rotation_direc == -1){
 					rotate(left,2);
 				}else if(tmp_rotation_direc == 1){
