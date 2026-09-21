@@ -1,4 +1,4 @@
-unsigned char run_pat[200];
+unsigned char run_pat[512];	//16x16の最長経路(256区画)でも1区画あたり最大1要素しか使わないため512で足りる
 
 void fast_calc(char x, char y)
 {

@@ -77,6 +77,7 @@ void straight_for_search(long len, double end_speed)	//直線走行、探索用�
     canvas.fillRect(88, 130, 50, 25, BLACK);
     canvas.fillRect(73, 140, 80, 5, WHITE);
     //canvas.pushRotateZoom(120, 180, 0, 1.0, 1.0);
+    break_flug=0;
   }
 
 }
@@ -158,6 +159,7 @@ void straight(long len, double end_speed)
     canvas.fillRect(88, 130, 50, 25, BLACK);
     canvas.fillRect(73, 140, 80, 5, WHITE);
     //canvas.pushRotateZoom(120, 180, 0, 1.0, 1.0);
+    break_flug=0;
   }
   ref_step=total_step;
 }

@@ -10,6 +10,7 @@ short edge_cnt_R,edge_cnt_L;
 hw_timer_t *g_timer0 = NULL;
 portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
 void IRAM_ATTR onTimer() {  //0.2ms周期
+  int sen_diff;//壁センサの消灯時-点灯時の差(負になり得るのでsignedで受ける)
   //noInterrupts(); // 排他制御開始
   portENTER_CRITICAL_ISR(&timerMux);
   left_cnt++;
@@ -61,9 +62,12 @@ void IRAM_ATTR onTimer() {  //0.2ms周期
       l_front_black = analogRead(35);
       digitalWrite(IR_LED, 1);//IR_LED:ON
       delayMicroseconds(10);//10us待ち
-      r_side = r_side_black-analogRead(36);
-      l_front = l_front_black-analogRead(35);
-      
+      //差が負のままuint16_tへ入れると65535付近になり、log_table[4096]の範囲外を引くため0でクランプする
+      sen_diff = r_side_black-analogRead(36);
+      r_side  = (sen_diff<0) ? 0 : sen_diff;
+      sen_diff = l_front_black-analogRead(35);
+      l_front = (sen_diff<0) ? 0 : sen_diff;
+
       //analogReadMilliVolts()
       digitalWrite(IR_LED, 0);//IR_LED:OFF
       break;
@@ -77,8 +81,11 @@ void IRAM_ATTR onTimer() {  //0.2ms周期
       r_front_black = analogRead(35);
       digitalWrite(IR_LED, 1);//IR_LED:ON
       delayMicroseconds(10);//10us待ち
-      l_side = l_side_black-analogRead(36);
-      r_front = r_front_black-analogRead(35);
+      //差が負のままuint16_tへ入れると65535付近になり、log_table[4096]の範囲外を引くため0でクランプする
+      sen_diff = l_side_black-analogRead(36);
+      l_side  = (sen_diff<0) ? 0 : sen_diff;
+      sen_diff = r_front_black-analogRead(35);
+      r_front = (sen_diff<0) ? 0 : sen_diff;
       digitalWrite(IR_LED, 0);//IR_LED:OFF
       break;
   }
