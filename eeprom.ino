@@ -48,6 +48,20 @@ void load_map(void){
 
 }
 
+//指定された区画がゴール区画か否かを判断する
+bool is_goal_cell(char x, char y){
+  #ifdef ONEONE
+    return (x==GOAL_X && y==GOAL_Y);
+  #else
+    return ((x==GOAL_X || x==GOAL_X+1) && (y==GOAL_Y || y==GOAL_Y+1));
+  #endif
+}
+
+//2区画の境界がゴール区画周辺の壁か否かを判断する(片側だけがゴール区画なら周辺の壁)
+bool is_goal_wall(char x1, char y1, char x2, char y2){
+  return (is_goal_cell(x1,y1) != is_goal_cell(x2,y2));
+}
+
 void view_map(void){
 
         canvas.fillScreen(BLACK);
@@ -62,11 +76,11 @@ void view_map(void){
         for(ep_x=0;ep_x<16;ep_x++){
           for(ep_y=0;ep_y<16;ep_y++){
             //canvas.fillRect(2+ep_x*14, 2+ep_y*14, 12, 12, RED);
-            //北
-            if(wall[ep_x][ep_y].north==WALL  ){canvas.fillRect(2+ep_x*14, (15-ep_y)*14, 12, 2, RED);}
+            //北 ゴール区画周辺の壁は黄色
+            if(wall[ep_x][ep_y].north==WALL  ){canvas.fillRect(2+ep_x*14, (15-ep_y)*14, 12, 2, is_goal_wall(ep_x,ep_y,ep_x,ep_y+1) ? YELLOW : RED);}
             if(wall[ep_x][ep_y].north==NOWALL){canvas.fillRect(2+ep_x*14, (15-ep_y)*14, 12, 2, BLACK);}
-            //東
-            if(wall[ep_x][ep_y].east ==WALL  ){canvas.fillRect((ep_x+1)*14, 2+(15-ep_y)*14, 2, 12, RED);}
+            //東 ゴール区画周辺の壁は黄色
+            if(wall[ep_x][ep_y].east ==WALL  ){canvas.fillRect((ep_x+1)*14, 2+(15-ep_y)*14, 2, 12, is_goal_wall(ep_x,ep_y,ep_x+1,ep_y) ? YELLOW : RED);}
             if(wall[ep_x][ep_y].east ==NOWALL){canvas.fillRect((ep_x+1)*14, 2+(15-ep_y)*14, 2, 12, BLACK);}
           }
         } 
