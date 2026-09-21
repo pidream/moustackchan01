@@ -31,18 +31,18 @@
 
 //センサ 位置の基準
 //横壁
-#define REF_SEN_R	320			//マウスを迷路中央に置いた時の横センサの値
-#define REF_SEN_L	320			//マウスを迷路中央に置いた時の横センサの値
-#define REF_SEN_RP	300		//柱だけの時の横センサの値
-#define REF_SEN_LP	300		//柱だけの時の横センサの値
-#define KABE_TR_TH 15     //壁制御不感帯幅
+#define REF_SEN_R	320 //マウスを迷路中央に置いた時の横センサの値
+#define REF_SEN_L	320 //マウスを迷路中央に置いた時の横センサの値
+#define REF_SEN_RP	300 //柱だけの時の横センサの値
+#define REF_SEN_LP	300 //柱だけの時の横センサの値
+#define KABE_TR_TH  15  //壁制御不感帯幅
 
 //前壁
-#define REF_SEN_FR	250			//マウスを柱真横の前センサの値
-#define REF_SEN_FL	250			//マウスを柱真横の前センサの値
+#define REF_SEN_FR	250 //マウスを柱真横の前センサの値
+#define REF_SEN_FL	250 //マウスを柱真横の前センサの値
 
-#define END_SEN_FR	327			//マウスを迷路中央に置いた時の前センサの値	45mm
-#define END_SEN_FL	327			//マウスを迷路中央に置いた時の前センサの値
+#define END_SEN_FR	327 //マウスを迷路中央に置いた時の前センサの値	45mm
+#define END_SEN_FL	327 //マウスを迷路中央に置いた時の前センサの値
 
 #define REF_SEN_FT	(REF_SEN_FR+REF_SEN_FL)	//柱位置
 #define END_SEN_FT	(END_SEN_FR+END_SEN_FL)	//迷路中央

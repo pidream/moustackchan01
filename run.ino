@@ -244,7 +244,7 @@ void turn(char dir,char times)
     dif_accl=-1;
     interrupts(); // 排他制御終了
 
-    while( now_dif_speed<target_dif_speed){continue;}
+    while( now_dif_speed>target_dif_speed){continue;}
 
     stepsUsedForAcceleration = (diff_step)-ref_deff_step;//加速に使ったステップ数を記録
     //stepsUsedForAcceleration=15;
