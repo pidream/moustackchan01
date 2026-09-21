@@ -805,6 +805,16 @@ void search_adachi(char gx, char gy)
 		{
 			case front:
 				//eda_kari();//枝刈り処理を回す
+					end_f_sensor = REF_SEN_FT;
+					straight_for_search(MM2LENGTH(20),SEARCH_SPEED);
+					set_wall_F(mypos.x,mypos.y);		//前壁再確認
+					
+					if(sen_fr.is_wall || sen_fl.is_wall){	//	前壁があったら（前壁を読み損ねていた場合）
+						straight_for_search(FIRST_HALF_SECTION,0);	//半区画進んで
+						ref_step = total_step;//距離0点
+						glob_nextdir=(t_direction)((glob_nextdir+2)%4);
+						goto janpstop;
+					}
 
 				if(mypos.dir == north && is_unknown(mypos.x, mypos.y+1)==false && wall[mypos.x][mypos.y+1].north == NOWALL){	//北向き && 1区間先も既知区間
 					known_st_cnt=0;
@@ -866,16 +876,7 @@ void search_adachi(char gx, char gy)
 
 					
 					
-					end_f_sensor = REF_SEN_FT;
-					straight_for_search(MM2LENGTH(20),SEARCH_SPEED);
-					set_wall_F(mypos.x,mypos.y);		//前壁再確認
-					
-					if(sen_fr.is_wall || sen_fl.is_wall){	//	前壁があったら（前壁を読み損ねていた場合）
-						straight_for_search(FIRST_HALF_SECTION,0);	//半区画進んで
-						ref_step = total_step;//距離0点
-						glob_nextdir=(t_direction)((glob_nextdir+2)%4);
-						goto janpstop;
-					}
+
 					
 					end_f_sensor = REF_SEN_FT;
 					straight_for_search(SECTION,SEARCH_SPEED);	//一区画進む

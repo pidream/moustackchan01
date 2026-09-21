@@ -139,7 +139,7 @@ void fast_run(char x, char y)
         #if ENABLE_SLAM
 					end_f_sensor = START_TURN;
         	straight_for_search(D33MM, SLAM_SPEED);//06+27=33
-        	if((line_fl<line_fr+10 && line_fl>line_fr-10) || (sen_fl.is_wall == false && sen_fr.is_wall == false) ){
+        	if((line_fl<line_fr+10 && line_fl>line_fr-10) || (sen_fl.is_wall == false && sen_fr.is_wall == false)||fotce_sr_en ){
 						if(line_l>REF_SEN_L	+15){tmp_ofset_flug=-1;}//左壁に近い→右にずれる
         		turn(right,1);
         		if(tmp_ofset_flug==1){ref_step=total_step + D15MM;}
@@ -175,7 +175,7 @@ void fast_run(char x, char y)
         #if ENABLE_SLAM
 					end_f_sensor = START_TURN;
         	straight_for_search(D33MM, SLAM_SPEED);
-					if((line_fl<line_fr+10 && line_fl>line_fr-10) || (sen_fl.is_wall == false && sen_fr.is_wall == false) ){//前壁との角度誤差がない場合（と前壁がない場合）にだけスラロームする
+					if((line_fl<line_fr+10 && line_fl>line_fr-10) || (sen_fl.is_wall == false && sen_fr.is_wall == false)||fotce_sr_en ){//前壁との角度誤差がない場合（と前壁がない場合）にだけスラロームする
         		if(line_r>REF_SEN_R	+15){tmp_ofset_flug=1;}//右壁に近い→左にずれる
         		turn(left,1);
         		if(tmp_ofset_flug==1){ref_step=total_step + D15MM;}
