@@ -127,8 +127,36 @@ void loop() {
       delay(500);
       break;
 
-    case 1://テスト走行
-    case 2:
+    case 1://テスト走行 11区間直進
+          digitalWrite(MOTOR_EN, 1);  // nsleepをHIGHでモータ励磁
+      
+      while(line_fr<280){
+        canvas.pushSprite(&lcd, random(0,14), 45+random(0,10) );
+        delay(30); 
+      }
+      lcd.fillScreen(BLACK);
+      canvas.pushSprite(&lcd, 7, 50 );
+      delay(1000);
+      cnt0=0;
+
+      max_speed=350;//600mm/s
+
+      ref_step=total_step;//距離0点
+      straight_for_search(0,SEARCH_SPEED); //ダミーの直進処理。何故か最初の直進が無視されるため
+      straight_for_search(SECTION,SEARCH_SPEED); 
+      ref_step=total_step;//距離0点
+      straight_for_search(SECTION*10, 0);
+      digitalWrite(MOTOR_EN, 0);  // nsleepをHIGHでモータ励磁
+      delay(10);
+      //lcd.printf("LEFT  F: %4d,  \n", line_fl);  // 画面に表示
+      //lcd.printf("RIGHT F: %4d,  \n", line_fr);  // 画面に表示
+      
+
+      while(1){;}
+
+      break;
+
+    case 2://テスト走行
       digitalWrite(MOTOR_EN, 1);  // nsleepをHIGHでモータ励磁
       
       while(line_fr<280){

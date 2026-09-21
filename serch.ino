@@ -688,10 +688,10 @@ void search_adachi(char gx, char gy)
 	
 	make_map(gx,gy,MASK_SEARCH,FAST_SEACH);				//歩数Map生成
 	if( step_map[mypos.x][mypos.y]==0xffff){
-    digitalWrite(MOTOR_EN, 0);  // nsleepをHIGHでモータ励磁
-    lcd.printf("map_break \n");
-    return;
-  }
+		digitalWrite(MOTOR_EN, 0);  // nsleepをHIGHでモータ励磁
+		lcd.printf("map_break \n");
+		return;
+  	}
 	switch(get_nextdir(MASK_SEARCH,&glob_nextdir))		//次に行く方向を戻り値とする関数を呼ぶ
 	{
 		case front:
@@ -723,10 +723,10 @@ void search_adachi(char gx, char gy)
 			break;
 	}
 
-		//con_wall.enable = true;					//壁制御を有効にする
-		ref_step = total_step;//距離0点				//進んだ距離カウント用変数をリセット
-	
-		mypos.dir = glob_nextdir;				//方向を更新
+	//con_wall.enable = true;					//壁制御を有効にする
+	ref_step = total_step;//距離0点				//進んだ距離カウント用変数をリセット
+
+	mypos.dir = glob_nextdir;				//方向を更新
 
 
 	//向いた方向によって自分の座標を更新する
@@ -751,16 +751,10 @@ void search_adachi(char gx, char gy)
 	}
 
 	ref_step = total_step;//距離0点
-	//while((mypos.x != gx) || (mypos.y != gy) ){	//ゴール座標（1点）に到達するまで繰り返す
+
   	while( step_map[mypos.x][mypos.y]!=0 ){			//ゴール区間に入るまで繰り返す
-	//while( step_map[mypos.x][mypos.y]!=0 || is_unknown(mypos.x,mypos.y)==true ){	//未探索のゴールがなくなるまで繰り返す。||zentansaku!=0
-	  //	ゴールではない                      未探索
 		
 		if(flug_run_err==1){break;}
-		//_LED(2);
-		//if(gtimaer==120000 || gtimaer==180000 || gtimaer==240000 || gtimaer==300000 || gtimaer==330000|| gtimaer==360000){save_map_flug=1;}
-		//	     2分	     3分		4分		   5分		    5分半		6分
-		//straight_for_search(MM2LENGTH(10),SEARCH_SPEED);
 		
 		tmp_rotation_direc = 0;
 		//if(line_r>(cal_cen_r+10)){tmp_rotation_direc = -1;}//右に近い→左周り 17->5mm
@@ -770,25 +764,20 @@ void search_adachi(char gx, char gy)
 		
 		cnt2 = 0;
 
-
-		set_wall(mypos.x,mypos.y);					//壁をセット
-		make_map(gx,gy,MASK_SEARCH,FAST_SEACH);				//歩数Map生成
+		set_wall(mypos.x,mypos.y);				//壁をセット
+		make_map(gx,gy,MASK_SEARCH,FAST_SEACH);	//歩数Map生成
 		
-    	//delay(500);
-		
-		//if( step_map[mypos.x][mypos.y]==0xffff){zentansaku=2;break;}//荒探索完了、最短経路上未探索に切り替え
-		//if(zentansaku==1 && gtimaer>_6MINS){zentansaku=2;break;}//探索制限時間 5分後に最短経路上未探索に切り替え
-		//if(zentansaku==2 && gtimaer>_7MINS){break;}//7分で探索打ち切り
 
-	  if(step_map[mypos.x][mypos.y] == 0xffff){//MAP破壊(目標地点までが塞がっている。)
-		  digitalWrite(MOTOR_EN, 0);  // nsleepをHIGHでモータ励磁
-      lcd.setCursor(0, 0); 
-      lcd.fillScreen(BLACK);
-      lcd.printf("map_break \n");
-		  while(1){
-			  delay(1);
-		  }
-    }
+	  	if(step_map[mypos.x][mypos.y] == 0xffff){//MAP破壊(目標地点までが塞がっている。)
+		  	digitalWrite(MOTOR_EN, 0);  // nsleepをHIGHでモータ励磁
+			lcd.setCursor(0, 0); 
+			lcd.fillScreen(BLACK);
+			lcd.printf("map_break \n");
+		  	while(1){
+			  	delay(1);
+		  	}
+    	}
+
 		switch(get_nextdir(MASK_SEARCH,&glob_nextdir))		//次に行く方向を戻り値とする関数を呼ぶ
 		{
 			case front:
